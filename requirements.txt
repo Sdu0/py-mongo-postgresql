@@ -13,3 +13,6 @@ pymongo == 3.7.1
 
 # ES
 elasticsearch>=6.0.0,<7.0.0
+
+# Postgresql
+psycopg2 == 2.7.7
