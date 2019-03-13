@@ -10,10 +10,10 @@ from pymongo.errors import AutoReconnect
 from bson.timestamp import Timestamp
 
 from process import (read_config, write_config, read_mapping,
-                     format_data, format_data_for_aggs, )
+                     format_data, get_sql, )
 from utils.logger import Logger
 from utils.mongo import Mongo
-from utils.elastic import Elastic
+from utils.postgresql import Postgresql
 
 # Time to wait for data or connection.
 _SLEEP = 1
@@ -30,17 +30,12 @@ class Sync:
 
         # inital logging
         self.logger = Logger('sync')
-        self.pg = Postgresql(self.postgresql)
 
     # 基于 SQL 语句的全量同步
     def _full_sql(self):
         self.logger.record('Starting：based full sql...')
 
         for table in self.mongo['tables']:
-
-            # create new es index
-            self.logger.record('create new es index:{}'.format(table))
-            self.es.init(table, mapping=read_mapping(table))
 
             # sync
             self.mongo['table'] = table
@@ -49,32 +44,19 @@ class Sync:
             offset = 0
             limit = 100
             while offset <= total:
-
                 # record offset and limit
                 self.logger.record('offset:{}, limit:{}'.format(offset, limit))
-
                 queryset = client.find(offset=offset, limit=limit)
                 actions = []
                 action_ids = []
                 for q in queryset:
-                    # 数据库ID -> 文档ID
-                    doc_id = str(q['_id'])
-                    del q['_id']
-                    # format data
-                    doc = q
-                    format_data(doc)
-                    format_data_for_aggs(doc)
+                    data = format_data(table, q)
+                    action_ids.append(str(q['_id']))
+                    actions.append(data)
 
-                    action_ids.append(doc_id)
-                    actions.append({
-                        "_index": table,
-                        "_type":  table,
-                        "_id": doc_id,
-                        "_source": doc
-                    })
-
-                # elastic save for batch
-                self.es.insert_batch(table, actions, action_ids)
+                # pg save for batch
+                sql = get_sql(table)
+                Postgresql(self.postgresql).insert_batch(sql, actions)
 
                 sleep(_SLEEP)
                 offset += limit

@@ -117,7 +117,7 @@ class Postgresql:
         try:
             cursor = self.connect.cursor()
             # executemany() to insert multiple rows rows
-            result = cursor.executemany(sql_insert_query, records)
+            result = cursor.executemany(sql, values)
             self.logger.record("insert batch result: {}".format(result))
             self.connect.commit()
         except (Exception, psycopg2.Error) as error:

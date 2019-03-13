@@ -8,12 +8,32 @@ def str_to_md5str(my_str):
     return hash_md5.hexdigest()
 
 
-def date_to_str(dt, pattern='%Y-%m-%d %H:%M:%S'):
-    return dt.strftime(pattern)
+def date_to_str(dt, sub='second'):
+    pattern = {
+        'year': '%Y',
+        'month': '%Y-%m',
+        'day': '%Y-%m-%d',
+        'hour': '%Y-%m-%d %H',
+        'minute': '%Y-%m-%d %H:%M',
+        'second': '%Y-%m-%d %H:%M:%S',
+    }
+    return dt.strftime(pattern[sub])
 
 
-def str_to_date(my_str, pattern='%Y-%m-%d %H:%M:%S'):
-    return datetime.strptime(dt, pattern)
+def str_to_date(my_str, sub='second'):
+    pattern = {
+        'year': '%Y',
+        'month': '%Y-%m',
+        'day': '%Y-%m-%d',
+        'hour': '%Y-%m-%d %H',
+        'minute': '%Y-%m-%d %H:%M',
+        'second': '%Y-%m-%d %H:%M:%S',
+    }
+    return datetime.strptime(dt, pattern[sub])
+
+
+def date_format(my_str):
+    return my_str.split(' ')[0]
 
 
 #使用递归格式化深层次字典中的时间类型的值
