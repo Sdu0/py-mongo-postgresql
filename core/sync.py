@@ -34,7 +34,7 @@ class Sync:
     # 基于 SQL 语句的全量同步
     def _full_sql(self):
         self.logger.record('Starting：based full sql...')
-
+        
         for table in self.mongo['tables']:
 
             # sync
