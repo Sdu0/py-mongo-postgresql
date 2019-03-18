@@ -124,7 +124,7 @@ def format_data(table, data):
     elif table == 'pos_product_sales':
         sales_date = date_to_str(data['sales_date'], sub='day')
         store_id = data['store_id']
-        product_id = 0 if not data['item_id'] else data['item_id']
+        product_id = 0 if not data.get('item_id') else data['item_id']
         product_trans_discount = data['item_trans_discount']
         product_avg_net_amount = data['item_avg_net_amount']
         product_discount = data['item_discount']
