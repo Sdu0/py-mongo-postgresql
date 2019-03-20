@@ -130,6 +130,7 @@ def format_data(table, data):
         year = sales_date_list[0]
         store_id = data['store_id']
         product_id = 0 if not data.get('item_id') else data['item_id']
+        product_is_deal_master = data.get('item_is_deal_master', False)
         product_trans_discount = data['item_trans_discount']
         product_avg_net_amount = data['item_avg_net_amount']
         product_discount = data['item_discount']
@@ -151,7 +152,7 @@ def format_data(table, data):
         all_cup_sum_net_amount = data['all_cup_sum_net_amount']
         status = data['status']
         created = date_to_str(data['created']) 
-        return (str_id, day, month, year, sales_date, store_id, product_id, product_trans_discount, product_avg_net_amount, product_discount, product_net_amount_rate, product_in_discount, product_quantity, product_cancel_amount, product_amount, product_in_quantity, product_hundred_times_rate, product_hex_net_amount, product_in_amount, product_cancel_discount, product_quantity_rate, product_hex_discount, product_net_amount, product_cancel_quantity, all_cup_sum_product_count, all_cup_sum_net_amount, status, created)
+        return (str_id, day, month, year, sales_date, store_id, product_id, product_is_deal_master, product_trans_discount, product_avg_net_amount, product_discount, product_net_amount_rate, product_in_discount, product_quantity, product_cancel_amount, product_amount, product_in_quantity, product_hundred_times_rate, product_hex_net_amount, product_in_amount, product_cancel_discount, product_quantity_rate, product_hex_discount, product_net_amount, product_cancel_quantity, all_cup_sum_product_count, all_cup_sum_net_amount, status, created)
 
 
 # 业务相关操作：获取sql语句
@@ -173,6 +174,6 @@ def get_sql(table):
         '''
     elif table == 'pos_product_sales':
         return '''
-            INSERT INTO product_sales(id, day, month, year, sales_date, store_id, product_id, product_trans_discount, product_avg_net_amount, product_discount, product_net_amount_rate, product_in_discount, product_quantity, product_cancel_amount, product_amount, product_in_quantity, product_hundred_times_rate, product_hex_net_amount, product_in_amount, product_cancel_discount, product_quantity_rate, product_hex_discount, product_net_amount, product_cancel_quantity, all_cup_sum_product_count, all_cup_sum_net_amount, status, created)
-            VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO product_sales(id, day, month, year, sales_date, store_id, product_id, product_is_deal_master, product_trans_discount, product_avg_net_amount, product_discount, product_net_amount_rate, product_in_discount, product_quantity, product_cancel_amount, product_amount, product_in_quantity, product_hundred_times_rate, product_hex_net_amount, product_in_amount, product_cancel_discount, product_quantity_rate, product_hex_discount, product_net_amount, product_cancel_quantity, all_cup_sum_product_count, all_cup_sum_net_amount, status, created)
+            VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         '''

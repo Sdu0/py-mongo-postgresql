@@ -45,7 +45,8 @@ class Sync:
             limit = 100
             while offset <= total:
                 # record offset and limit
-                self.logger.record('offset:{}, limit:{}'.format(offset, limit))
+                self.logger.record('total:{}, offset:{}, limit:{}'.format(total, offset, limit))
+                sleep(_SLEEP)
                 queryset = client.find(offset=offset, limit=limit)
                 actions = []
                 action_ids = []
@@ -57,8 +58,7 @@ class Sync:
                 # pg save for batch
                 sql = get_sql(table)
                 Postgresql(self.postgresql).insert_batch(sql, actions)
-
-                sleep(_SLEEP)
+                
                 offset += limit
 
         self.logger.record('Ending：based full sql.')
